@@ -17,6 +17,7 @@ Movies:
 
 Shows:
 - http://tvseriale.com/
+- http://videotekaime.com
 
 Switched resolving from resolvers module to urlresolver because of better compatibility with the latest sources.
 
