@@ -4,7 +4,7 @@ In order for this addon to work you need to install urlresolver script addon fir
 
 https://offshoregit.com/tvaresolvers/tva-common-repository/raw/master/zips/script.module.urlresolver/
 
-or it can be done easily by installing fusion into Kodi: http://fusion.tvaddongs.ag
+or it can be done easily by installing fusion into Kodi: http://fusion.tvaddons.ag
 
 This addon is build upon Filma24-Al addon: https://offshoregit.com/pcd/pcd-repo/plugin.video.filma24-al/
 
