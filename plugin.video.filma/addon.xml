@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.filma" version="1.0.3" name="Filma" provider-name="pcd">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0" />
+		<import addon="script.module.urlresolver" version="3.0.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Films with Albanian subtitles from Filma24-AL, Filma On, Filma24HD, AlbFilm</summary>
+		<description>Films with Albanian subtitles from Filma24-AL, Filma On, Filma24HD, AlbFilm.</description>
+		<platform>all</platform>
+	</extension>
+</addon>
