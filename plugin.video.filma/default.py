@@ -23,7 +23,7 @@ import HTMLParser
 
 hostDict = ['allvid', 'exashare', 'filepup', 'filepup2', 'nosvideo', 'nowvideo', 'openload', 'vidlockers',
             'streamcloud', 'streamin', 'vidspot', 'vidto', 'xvidstage', 'nosvideo', 'nowvideo', 'vidbull', 'vodlocker',
-            'vidto', 'youwatch', 'videomega', 'estream', 'thevideo', 'watchers', 'dailymotion']
+            'vidto', 'youwatch', 'videomega', 'estream', 'thevideo', 'watchers', 'dailymotion','rapidvideo','speedvideo']
 
 thisPlugin = int(sys.argv[1])
 addonId = "plugin.video.filma24-al"
@@ -69,7 +69,7 @@ def showContent():
         if(url == "Kerko"):
             addDirectoryItem("Search", {"name": "Search", "url": url, "mode": 11}, pic)
         elif(url == "Providers"):
-            addDirectoryItem("Seriale", {"name": "Seriale", "url": url, "mode": 12}, pic)
+            addDirectoryItem("Seriale", {"name": "Seriale", "url": url, "mode": 15}, pic)
         else:
             addDirectoryItem(name, {"name": name, "url": url, "mode": 1}, pic)
     xbmcplugin.endOfDirectory(thisPlugin)
@@ -180,16 +180,18 @@ def getVideos(name1, urlmain):
         match = url_x
     pass  # print "match =", match
     for pic, url, name in match:
+        name = name.decode('utf-8').strip()
+        name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
         if ("http://www.filma24.tv" in urlmain):
-            name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
+            # name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
             addDirectoryItem(name, {"name": name, "url": url, "mode": 5}, pic)
         elif ("http://www.filma24hd.com" in urlmain):
-            name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
+            # name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
             addDirectoryItem(name, {"name": name, "url": url, "mode": 5}, pic)
         elif ("http://www.filmaon.com" in urlmain):
             addDirectoryItem(name, {"name": name, "url": url, "mode": 5}, pic)
         elif ("http://188.166.2.77" in urlmain):
-            name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
+            # name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
             addDirectoryItem(name, {"name": name, "url": url, "mode": 5}, pic)
 
         #	name = "More videos"
@@ -197,34 +199,34 @@ def getVideos(name1, urlmain):
     xbmcplugin.endOfDirectory(thisPlugin)
 
 
-def getVideos2(name1, urlmain):
-    url = urlmain + "&paged=2"
-    content = getUrl(url)
-    pass  # print "content B =", content
+# def getVideos2(name1, urlmain):
+#     url = urlmain + "&paged=2"
+#     content = getUrl(url)
+#     pass  # print "content B =", content
+#
+#     regexvideo = 'div class="boxim.*?a href="(.*?)".*?Boxoffice\/timthumb.*?src=(.*?)\&amp.*?div class="btitle.*?title=".*?>(.*?)<'
+#     match = re.compile(regexvideo, re.DOTALL).findall(content)
+#     pass  # print "match =", match
+#     for url, pic, name in match:
+#         ##pass#print "Here in getVideos url =", url
+#         addDirectoryItem(name, {"name": name, "url": url, "mode": 5}, pic)
+#     name = "More videos"
+#     addDirectoryItem(name, {"name": name, "url": urlmain, "mode": 4}, pic)
+#     xbmcplugin.endOfDirectory(thisPlugin)
 
-    regexvideo = 'div class="boxim.*?a href="(.*?)".*?Boxoffice\/timthumb.*?src=(.*?)\&amp.*?div class="btitle.*?title=".*?>(.*?)<'
-    match = re.compile(regexvideo, re.DOTALL).findall(content)
-    pass  # print "match =", match
-    for url, pic, name in match:
-        ##pass#print "Here in getVideos url =", url
-        addDirectoryItem(name, {"name": name, "url": url, "mode": 5}, pic)
-    name = "More videos"
-    addDirectoryItem(name, {"name": name, "url": urlmain, "mode": 4}, pic)
-    xbmcplugin.endOfDirectory(thisPlugin)
 
-
-def getVideos3(name1, urlmain):
-    url = urlmain + "&paged=3"
-    content = getUrl(url)
-    pass  # print "content B1 =", content
-
-    regexvideo = 'div class="boxim.*?a href="(.*?)".*?Boxoffice\/timthumb.*?src=(.*?)\&amp.*?div class="btitle.*?title=".*?>(.*?)<'
-    match = re.compile(regexvideo, re.DOTALL).findall(content)
-    pass  # print "match =", match
-    for url, pic, name in match:
-        ##pass#print "Here in getVideos url =", url
-        addDirectoryItem(name, {"name": name, "url": url, "mode": 5}, pic)
-    xbmcplugin.endOfDirectory(thisPlugin)
+# def getVideos3(name1, urlmain):
+#     url = urlmain + "&paged=3"
+#     content = getUrl(url)
+#     pass  # print "content B1 =", content
+#
+#     regexvideo = 'div class="boxim.*?a href="(.*?)".*?Boxoffice\/timthumb.*?src=(.*?)\&amp.*?div class="btitle.*?title=".*?>(.*?)<'
+#     match = re.compile(regexvideo, re.DOTALL).findall(content)
+#     pass  # print "match =", match
+#     for url, pic, name in match:
+#         ##pass#print "Here in getVideos url =", url
+#         addDirectoryItem(name, {"name": name, "url": url, "mode": 5}, pic)
+#     xbmcplugin.endOfDirectory(thisPlugin)
 
 
 def getVideos4(name, url):
@@ -356,48 +358,99 @@ def parameters_string_to_dict(parameters):
 def parso(regex, url):
     return re.compile(regex).findall(getUrl(url))
 
-def kerkoserialet():
-    content = getUrl("http://tvseriale.com/")
-    categories_regex = '<li class="(.*)'
-    match = re.compile(categories_regex).findall(content)
-    categories = match[0]
-    links_regex = 'href="([/\w:\.-]+)"'
-    links = re.compile(links_regex).findall(categories)
+def kategori():
     pic = ''
-    for i in links:
-        names = i.split('/')[4].replace('-',' ').title()
-        if(not 'Seriale' in names and not 'Uncategorized' in names and not 'Infos'in names):
-            addDirectoryItem(names, {"name": names, "url": i, "mode": 13}, pic)
+    url_videoteka = 'http://videotekaime.com/index.php'
+    kategorite = parso('<li ><a href=(seriale_me_titra_shqip/index.php\?.*)>(Seriale\s\w+)', url_videoteka)
+    for linku, kategori in kategorite:
+        linku = url_videoteka.replace('index.php','') + linku
+        addDirectoryItem(kategori, {"name": kategori, "url": linku, "mode": 12}, pic)
+    kategorik = 'Seriale Shqipe dhe Turke'
+    urlik = "http://tvseriale.com/"
+    addDirectoryItem(kategorik, {"name": kategorik, "url": urlik, "mode": 12}, pic)
     xbmcplugin.endOfDirectory(thisPlugin)
 
 def listo_serialet(url):
-    pic = ''
-    regexi = '<h1 class="archiveTitle"><a href="(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)" rel="bookmark" title="(.*)"'
-    match = parso(regexi, url)
-    #match = sorted(list(set([x for x in match if not url == x and not 'feed' in x and 'tvseriale' in x  ])))
-    for urli, namei in sorted(match):
-        namei = namei.decode('utf-8').strip()
-        namei = HTMLParser.HTMLParser().unescape(namei).encode('utf-8')
-        addDirectoryItem(namei, {"name": namei, "url": urli, "mode": 14}, pic)
-    try:
-        matchi = parso('(class="navigation">\s.*\s+</div><!-- /innerLeft -->)', url)[0]
-        regex = '(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)" >([&\;\w\s]+)</a>'
-        matchi = re.compile(regex).findall(matchi)
-        for url, name in matchi:
-            name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
-            addDirectoryItem(name, {"name": name, "url": url, "mode": 13}, pic)
-    except:
+    if ('tvseriale' in url):
+        pic = ''
+        content = getUrl(url)
+        categories_regex = '<li class="(.*)'
+        match = re.compile(categories_regex).findall(content)
+        categories = match[0]
+        links_regex = 'href="([/\w:\.-]+)"'
+        links = re.compile(links_regex).findall(categories)
+        for i in links:
+            names = i.split('/')[4].replace('-',' ').title()
+            if(not 'Seriale' in names and not 'Uncategorized' in names and not 'Infos'in names):
+                addDirectoryItem(names, {"name": names, "url": i, "mode": 13}, pic)
+    if('videoteka' in url):
+        pic = ''
+        serialet = parso("href='(seriale_\w+/[\w_\.]+)'><img\s+src='\.+([\w/_]+.jpg)'\salt='([\w\s]+)'",url)
+        # addDirectoryItem(url, {"name": url, "url": url, "mode": 13}, pic)
+        for url_seri, foto, emri in serialet:
+            url_seri = 'http://' + urlparse(url).netloc+ '/seriale_me_titra_shqip/' + url_seri
+            foto = 'http://'+ urlparse(url).netloc + foto
+            addDirectoryItem(emri, {"name": emri, "url": url_seri, "mode": 13}, foto)
+    xbmcplugin.endOfDirectory(thisPlugin)
+
+def listo_epizodat(url):
+    if('tvseriale' in url):
         pass
+        pic = ''
+        regexi = '<h1 class="archiveTitle"><a href="(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)" rel="bookmark" title="(.*)"'
+        match = parso(regexi, url)
+        #match = sorted(list(set([x for x in match if not url == x and not 'feed' in x and 'tvseriale' in x  ])))
+        for urli, namei in sorted(match):
+            namei = namei.decode('utf-8').strip()
+            namei = HTMLParser.HTMLParser().unescape(namei).encode('utf-8')
+            addDirectoryItem(namei, {"name": namei, "url": urli, "mode": 14}, pic)
+        try:
+            matchi = parso('(class="navigation">\s.*\s+</div><!-- /innerLeft -->)', url)[0]
+            regex = '(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)" >([&\;\w\s]+)</a>'
+            matchi = re.compile(regex).findall(matchi)
+            for url, name in matchi:
+                name = HTMLParser.HTMLParser().unescape(name).encode("utf-8")
+                addDirectoryItem(name, {"name": name, "url": url, "mode": 13}, pic)
+        except:
+            pass
+    if('videoteka' in url):
+        pic = ''
+        # addDirectoryItem(url, {"name": url, "url": url, "mode": 13}, pic)
+        episodat_url = parso("episodeNumber'>([\w\s\d-]+)</span><a itemprop='url' href='http://[\w\d\./=]+(www.videotekaime.com[\w\d_/]+)'", url)
+        for episoda, episoda_url in episodat_url:
+            episoda_url = 'http://' + episoda_url
+            addDirectoryItem(episoda, {"name": episoda, "url": episoda_url, "mode": 14}, pic)
     xbmcplugin.endOfDirectory(thisPlugin)
 
 def parso_source(url):
     pic = ''
-    i = parso('((?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)', url)
-    for x in i:
-        for k in hostDict:
-            if k in urlparse(x).netloc:
-                    addDirectoryItem(x, {"name": x, "url": x, "mode": 7}, pic)
-    xbmcplugin.endOfDirectory(thisPlugin)
+    if('tvseriale' in url):
+        pass
+        i = parso('((?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)', url)
+        for x in i:
+            for k in hostDict:
+                if k in urlparse(x).netloc:
+                    stream_url = getVidurl(x, x)
+                    playVideo(x, stream_url)
+    if('videoteka' in url):
+        # url = "http://www.videotekaime.com/stream/streaming_4/_SK_ab6701d01459611e6a1d279509072a0e_VK_096646f7b05684053ff9f22d918db3f1"
+        streams = parso("href='../(streaming_[\d\w/]+)'",url) # per source perdor id='streamlink'><li>(.*)</li></ul>
+        for stream in streams:
+            if ('streaming_4' in stream):
+                urli = 'http://www.videotekaime.com/stream/' + stream
+                source_4 = parso("(Video[HL]D)='([\w:\d\./_-]+)'", 'http://www.videotekaime.com/stream/' + stream)
+                for lloji, s in source_4:
+                    s = s + '|referer=' + urli
+                    addDirectoryItem(lloji, {"name": lloji, "url": s, "mode": 16}, pic)
+            else:
+                source = parso("id='streamlink'><li>(.*)</li><li>", 'http://www.videotekaime.com/stream/' + stream)
+                try:
+                    sorsi = source[0]
+                    source_provider = urlparse(sorsi).netloc
+                    addDirectoryItem(source_provider, {"name": source_provider, "url": sorsi, "mode": 7}, pic)
+                except:
+                    pass
+        xbmcplugin.endOfDirectory(thisPlugin)
 
 params = parameters_string_to_dict(sys.argv[2])
 name = str(params.get("name", ""))
@@ -414,10 +467,10 @@ else:
         ok = getPage(name, url)
     elif mode == str(2):
         ok = getVideos(name, url)
-    elif mode == str(3):
-        ok = getVideos2(name, url)
-    elif mode == str(4):
-        ok = getVideos3(name, url)
+    # elif mode == str(3):
+        # ok = getVideos2(name, url)
+    # elif mode == str(4):
+        # ok = getVideos3(name, url)
     elif mode == str(5):
         ok = getVideos4(name, url)
     elif mode == str(6):
@@ -434,8 +487,12 @@ else:
     elif mode == str(11):
         ok = ultimate_search()
     elif mode == str(12):
-        kerkoserialet()
-    elif mode == str(13):
         listo_serialet(url)
+    elif mode == str(13):
+        listo_epizodat(url)
     elif mode == str(14):
         parso_source(url)
+    elif mode == str(15):
+        kategori()
+    elif mode == str(16):
+        playVideo(name,url)
