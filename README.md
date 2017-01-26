@@ -1,11 +1,9 @@
-<!DOCTYPE html>  
-<html>  
-<head>  
-  <title>Redirecting to main site</title>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=index.html">
-</head>  
-<body>  
-  Redirecting<i>↻</i>
-</body>  
-</html> 
+<html>
+<body>
+<h2>repo</h2>
+<p>
+    <li><a href="plugin.video.filma">plugin.video.filma<a></li>
+    <li><a href="plugin.video.filma.zip">plugin.video.filma.zip<a></li>
+</p>
+</body>
+</html>
