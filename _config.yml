@@ -1,4 +1,4 @@
-theme: jekyll-theme-slate
+theme: jekyll-theme-architect
 gems:
   - jekyll-sitemap
   - jekyll-mentions
