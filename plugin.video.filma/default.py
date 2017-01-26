@@ -20,13 +20,14 @@ from urlresolver import resolve
 import HTMLParser
 # import rpdb2
 # rpdb2.start_embedded_debugger('pw')
-
+import os
+sys.path.append( os.path.join ( os.path.dirname(__file__),'lib') )
 hostDict = ['allvid', 'exashare', 'filepup', 'filepup2', 'nosvideo', 'nowvideo', 'openload', 'vidlockers',
             'streamcloud', 'streamin', 'vidspot', 'vidto', 'xvidstage', 'nosvideo', 'nowvideo', 'vidbull', 'vodlocker',
-            'vidto', 'youwatch', 'videomega', 'estream', 'thevideo', 'watchers', 'dailymotion','rapidvideo','speedvideo']
+            'vidto', 'youwatch', 'videomega', 'estream', 'thevideo', 'watchers', 'dailymotion','rapidvideo','speedvideo', 'novamov', 'videoweed', 'promptfile','netu', 'hqq','thevideos','upload.af']
 
 thisPlugin = int(sys.argv[1])
-addonId = "plugin.video.filma24-al"
+addonId = "plugin.video.filma"
 dataPath = xbmc.translatePath('special://profile/addon_data/%s' % (addonId))
 if not path.exists(dataPath):
     cmd = "mkdir -p " + dataPath
@@ -92,7 +93,7 @@ def getPage(name, url):
 
 def ultimate_search():
     value = get_numeric_dialog()
-    providers_search = ['http://www.albfilm.com/filma/kategoria/?q=', 'http://www.filma24hd.com/search/','http://www.filmaon.com/filma/?s=','http://www.filma24.tv/wp-admin/admin-ajax.php']
+    providers_search = ['http://www.albfilm.com/filma/kategoria/?q=', 'http://www.filma24hd.com/search/','http://www.filmaon.com/filma/?s=','http://www.filma24.tv/wp-admin/admin-ajax.php','http://www.albkino.co/search.php?keywords=', 'https://filma4k.com/?s=']
     for i in providers_search:
         match = search_providers(i,value)
         for pic, url, name in match:
@@ -118,7 +119,7 @@ def search_providers(url, value):
         values = {'action': 'load_search_results',
                   'query': value }
         values = urllib.urlencode(values)
-        #url = urllib.unquote_plus(url)
+        url = urllib.unquote_plus(url)
         content = getUrl(url,values)
         regexvideo = '(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)'
     if ("albfilm" in url):
@@ -127,6 +128,10 @@ def search_providers(url, value):
         regexvideo = '<h2><a href="(.*)"\stitle=".*">'
     if("filmaon.com" in url):
         regexvideo = '<h2><a href="(.*)"\stitle=".*</a></h2>'
+    if('albkino.co' in url):
+        regexvideo = '<a href="(.*)" class="pm-thumb-fix pm-thumb-185"><span class="pm-thumb-fix-clip"><img'
+    if('filma4k' in url):
+        regexvideo = 'class="title">\s+<a\s+href="(.*)">.*</a>'
     match = re.compile(regexvideo).findall(content)
     url_x = []
     # print match
@@ -148,6 +153,15 @@ def search_providers(url, value):
             m_x = m.split("/")[3]
             m_y = "Filma 24 TV | " +m_x.replace("-", " ").title()
             url_x.append(('', m, m_y))
+        if("albkino.co" in url):
+            m_x = m.split("/")[3]
+            m_y = "AlbKino | " + m_x.split('_')[0].replace("-", " ").title()
+            url_x.append(('', m, m_y))
+        if("filma4k" in url):
+            m_x = m.split("/")[4]
+            m_y = "Filma4K | " + m_x.replace("-", " ").title()
+            if(m_x is not ''):
+                url_x.append(('', m, m_y))
     match = url_x
     return match
     #for pic, url, name in match:
@@ -267,25 +281,44 @@ def getVideos4(name, url):
                     matchi.append((m, k))
         match = matchi
         mode_one = 7
+    elif ("http://www.albkino.co" in url):
+        regexvideo = '<iframe src="(htt\w+://(.*)\.\w+\/.*)"\sscrolling="no"'
+        match = re.compile(regexvideo).findall(content)
+        mode_one = 7
+    elif ("https://filma4k.com" in url):
+        regexvideo = '<iframe class="metaframe rptss" src="(htt\w+://(.*)\.\w+\/.*)" frameborder="0"'
+        match = re.compile(regexvideo).findall(content)
+        mode_one = 7
     pass  # print "match B=", match
-    for url, name in match:
-        if not name.lower() in hostDict:
-            continue
-        pic = " "
-        pass  # print "name B=", name
-        pass  # print "url B=", url
-        addDirectoryItem(name, {"name": name, "url": url, "mode": mode_one}, pic)
+    try:
+        for url, name in match:
+            if not name.lower() in hostDict:
+                continue
+            pic = " "
+            pass  # print "name B=", name
+            pass  # print "url B=", url
+            addDirectoryItem(name, {"name": name, "url": url, "mode": mode_one}, pic)
+    except:
+        pass
 
     xbmcplugin.endOfDirectory(thisPlugin)
 
 
 def getVidurl(name, url):
     name = name.lower()
-    try:
-        vidurl = resolve(url)
-        return vidurl
-    except:
-        return url
+    if ("hqq" in name) or ("hqq" in url):
+        pass  # print "In getVidurl nowvideo url 2=", url
+        from server import hqqresolver
+        vidurl = hqqresolver.resolve(url)
+        for i in vidurl:
+            vidurl1 = i["url"]
+            return vidurl1
+    else:
+        try:
+            vidurl = resolve(url)
+            return vidurl
+        except:
+            return url
 
 def getVideos5(name, url):
     pass  # print "In getVideos5 name =", name
