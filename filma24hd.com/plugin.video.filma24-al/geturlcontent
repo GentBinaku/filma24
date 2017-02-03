@@ -1,0 +1,25 @@
+import re
+import urllib, urllib2
+from urllib2 import Request, URLError, urlopen
+def getUrl(url):
+    pass  # print "Here in getUrl url =", url
+    req = urllib2.Request(url)
+    req.add_header('User-Agent',
+                   'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link = response.read()
+    response.close()
+    return link
+content = getUrl("http://www.filma24hd.com/baked-in-brooklyn-2016/")
+#print content
+regexvideo = 'shape="poly" href="(htt\w+://(.*)\.\w+\/.*)"\starget'
+match = re.compile(regexvideo).findall(content)
+for url, name in match:
+    print url, name
+    if name == "vidlox":
+            print url
+            contenti =  getUrl(url)
+            regexvideo = '(https://.*master.*\.m3u8)'
+            match = re.compile(regexvideo).findall(contenti)
+            print match[0]
+
